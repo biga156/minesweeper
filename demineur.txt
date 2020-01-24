@@ -1,0 +1,6 @@
+Créer un jeu de démineur sur un plateau de largeur L, de hauteur H, avec M mines
+- Creér un plateau de L colonnes et H lignes.
+- Poser au hasard les M mines sur le plateau.
+- le joueur clique sur une case :
+	- si la case contient une mine : fin du jeu (perdu)
+	- sinon afficher dans le case le nombre de mines adjacentes à la case (entre 0 et 8)
