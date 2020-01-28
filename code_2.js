@@ -27,7 +27,9 @@ function creerImage(imgurl) {
     for (let j=0; j<nbCol; j++) {
       let c = document.createElement("td");
       l.appendChild(c);
-     // c.onclick = function(e) { chercherMine(this,e); };
+      c.onclick = function(e) { chercherMine(this,e); };
+     
+      //c.addEventListener("click",chercherMine(,e));
       c.style.border = "1px solid #777";
       c.style.width = "40px";
       c.style.height = "40px";
@@ -37,7 +39,7 @@ function creerImage(imgurl) {
   }
   ajouterMines();
 }
-t.addEventListener("click",chercherMine);
+
 function ajouterMines() {
    for (let i=0; i<nbMine; i++) {
     let l = Math.floor(Math.random() * 10);
@@ -50,52 +52,48 @@ function ajouterMines() {
   }
 }
 
-function chercherMine(e) {
-  ca=e.target;
+function chercherMine(ca,e) {
+
   if(e.ctrlKey){
     ca.appendChild(creerImage("flag.jpg"));
     //ca.style.backgroundColor = "red";
-  }else  {
-      caseVide(ca);
-   }
-  
-}
-
-function caseVide(ca){
-  if (ca.dataset.type=="mine") {
-    son.play();
-    boom();
-    //alert("Tu as perdu");
-  } else {
-    ca.style.backgroundColor = "#65B976";
-
-    let compteur=0;
-    let caLigne = ca.parentNode.rowIndex;
-    let caCol = ca.cellIndex;
-  
-    for (let i=Math.max(caLigne-1,0); i<=Math.min(caLigne+1,9); i++) {
-      for(let j=Math.max(caCol-1,0); j<=Math.min(caCol+1,9); j++) {
-  
-        if (t.rows[i].cells[j].dataset.type==="mine"){
-            compteur++;
-        }
-      }
-    }
-    ca.innerHTML=compteur;          //resultat
-      if (compteur==0) { 
-        
-        for (let i=Math.max(caLigne-1,0); i<=Math.min(caLigne+1,9); i++) {
+  }else{
+    if (ca.dataset.type=="mine") {
+      son.play();
+      boom();
+      //alert("Tu as perdu");
+    } else {
+      ca.style.backgroundColor = "#65B976";
+    /*******************compteur*********************** */
+      let compteur=0;
+      let caLigne = ca.parentNode.rowIndex;
+      let caCol = ca.cellIndex;
+    
+      for (let i=Math.max(caLigne-1,0); i<=Math.min(caLigne+1,9); i++) {
         for(let j=Math.max(caCol-1,0); j<=Math.min(caCol+1,9); j++) {
-        
-          if (t.rows[i].cells[j].innerHTML==""){
-             caseVide(t.rows[i].cells[j]);
+    
+          if (t.rows[i].cells[j].dataset.type==="mine"){
+              compteur++;
           }
         }
       }
+      ca.innerHTML=compteur;          //resultat
+        if (compteur==0) { 
+          
+          for (let i=Math.max(caLigne-1,0); i<=Math.min(caLigne+1,9); i++) {
+          for(let j=Math.max(caCol-1,0); j<=Math.min(caCol+1,9); j++) {
+          
+            if (t.rows[i].cells[j].innerHTML==""){
+            chercherMine(t.rows[i].cells[j],e);
+            }
+          }
+        }
+      }
+      Verificateur();
     }
-    Verificateur();
   }
 }
+
 
 function Verificateur() {
     let fin = true;
